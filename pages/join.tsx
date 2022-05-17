@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RadioGroup } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/solid'
-import { signUp, signIn, answerCustomChallenge } from "../lib/auth"
+import { signUp, signIn, answerCustomChallenge, twitterLogIn } from "../lib/auth"
 
 // graphql mutations
 import { withApollo } from '../lib/withApollo'
@@ -117,6 +117,15 @@ function JoinBitcoinBachelors() {
         }
     }
 
+    const twitterJoin = async () => {
+        try {
+            const response = await twitterLogIn()
+            console.log(response)
+        } catch (error) {
+
+        }
+    }
+
     const handleSuccess = () => {
         window.location.href = '/'
     }
@@ -127,7 +136,7 @@ function JoinBitcoinBachelors() {
                     {status == RegistrationStatus.GENDER && <Gender genderSelection={genderSelection} setSelectedGender={setSelectedGender} setisLoading={setisLoading} setRegistrationStatus={setRegistrationStatus} />}
                     {status == RegistrationStatus.LOOKINGFOR && <LookingFor lookingForSelection={lookingForSelection} setSelectedLookingFor={setSelectedLookingFor} setisLoading={setisLoading} setRegistrationStatus={setRegistrationStatus} />}
                     {status == RegistrationStatus.PURPOSE && <Purpose purposeSelection={purposeSelection} setSelectedPurpose={setSelectedPurpose} setisLoading={setisLoading} setRegistrationStatus={setRegistrationStatus} />}
-                    {status == RegistrationStatus.USERNAME && <PhoneOrEmail createNewAccount={createNewAccount} setPhoneCode={setPhoneCode} phoneCode={phoneCode} setUserName={setUserName} setisLoading={setisLoading} />}
+                    {status == RegistrationStatus.USERNAME && <PhoneOrEmail createNewAccount={createNewAccount} twitterJoin={twitterJoin} setPhoneCode={setPhoneCode} phoneCode={phoneCode} setUserName={setUserName} setisLoading={setisLoading} />}
                     {status == RegistrationStatus.AUTHCODE && <AuthCode handleSubmit={handleSubmit} setAuthCode={setAuthCode} setisLoading={setisLoading} />}
                 </div>
             </div>}
@@ -357,8 +366,9 @@ interface PhoneOrEmailProps {
     setUserName: (value: string) => void
     setisLoading: (value: boolean) => void
     createNewAccount: () => void
+    twitterJoin: () => void
 }
-function PhoneOrEmail({ phoneCode, setPhoneCode, setUserName, setisLoading, createNewAccount }: PhoneOrEmailProps) {
+function PhoneOrEmail({ phoneCode, setPhoneCode, setUserName, setisLoading, createNewAccount, twitterJoin }: PhoneOrEmailProps) {
     const [toggleForm, setFormToggle] = useState<Boolean>(true)
     return (
         <div className='flex flex-col space-y-3'>
@@ -434,25 +444,28 @@ function PhoneOrEmail({ phoneCode, setPhoneCode, setUserName, setisLoading, crea
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-3">
                     <button type="button"
-                            onClick={() => {
-                                setUserName("")
-                                setFormToggle(!toggleForm)
-                            }}
-                            className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        onClick={() => {
+                            setUserName("")
+                            setFormToggle(!toggleForm)
+                        }}
+                        className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                         <span className="sr-only">Toggle Email or Phone</span>
                         {toggleForm ? <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                        </svg> :  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        </svg> : <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                        </svg>  }
+                        </svg>}
                     </button>
-                    <button type="submit"
-                            className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <button type="button"
+                        onClick={() => {
+                            twitterJoin()
+                        }}
+                        className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                         <span className="sr-only">Sign in with Twitter</span>
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path
-                                d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"/>
+                                d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
                         </svg>
                     </button>
                 </div>

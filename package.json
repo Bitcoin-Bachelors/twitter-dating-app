@@ -22,6 +22,7 @@
     "apollo-link-http": "1.5.17",
     "apollo-link-ws": "1.0.20",
     "aws-amplify": "^4.3.20",
+    "axios": "^0.27.2",
     "date-fns": "^2.21.1",
     "graphql": "14.6.0",
     "graphql-tag": "^2.12.6",
