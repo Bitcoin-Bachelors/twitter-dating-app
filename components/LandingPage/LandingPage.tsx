@@ -4,30 +4,34 @@ import { deleteuserdirectmessages, getuserdirectmessages, listuserdirectmessages
 const LandingPage = () => {
     const [messageId, setMessageId] = useState("")
     const [message, setMessage] = useState("")
+    const [recipientId, setRecipientId] = useState("")
 
     // handle list direct messages
     const handleListDirectMessages = async () => {
         const response = await listuserdirectmessages()
-        console.log(response)
+        console.log("listed direct message response", response)
     }
 
     // handle send direct messages
     const handleSendDirectMessages = async () => {
-        const response = await senduserdirectmessages(message)
+        const response = await senduserdirectmessages(message, recipientId)
         setMessage("")
-        console.log(response)
+        setRecipientId("")
+        console.log("sent message response", response)
     }
 
     // handle get direct messages
     const handleGetDirectMessages = async () => {
         const response = await getuserdirectmessages(messageId)
-        console.log(response)
+        setMessageId("")
+        console.log("get direct message response", response)
     }
 
     // handle delete direct messages
     const handleDeleteDirectMessages = async () => {
         const response = await deleteuserdirectmessages(messageId)
-        console.log(response)
+        setMessageId("")
+        console.log("delete direct message response", response)
     }
 
     return (
@@ -36,9 +40,7 @@ const LandingPage = () => {
                 <div>This will test listing of users direct messages. Ensure you have logged in with Twitter to</div>
                 <div>
                     <button
-                        onClick={() => {
-                            handleListDirectMessages()
-                        }}
+                        onClick={handleListDirectMessages}
                         type="button"
                         className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
@@ -63,9 +65,7 @@ const LandingPage = () => {
                 </div>
                 <div>
                     <button
-                        onClick={() => {
-                            handleGetDirectMessages()
-                        }}
+                        onClick={handleGetDirectMessages}
                         type="button"
                         className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
@@ -90,9 +90,7 @@ const LandingPage = () => {
                 </div>
                 <div>
                     <button
-                        onClick={() => {
-                            handleDeleteDirectMessages()
-                        }}
+                        onClick={handleDeleteDirectMessages}
                         type="button"
                         className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
@@ -102,7 +100,21 @@ const LandingPage = () => {
             </div>
             <div className="flex flex-col p-4 rounded-md shadow space-y-3">
                 <div>This will test sending direct message to a user. Ensure you have logged in with Twitter.</div>
-
+                <div>
+                    <label htmlFor="comment" className="sr-only">
+                        Recipient Id
+                    </label>
+                    <div className="mt-1">
+                    <input
+                        type="text"
+                        name="recipient-id"
+                        onChange={(event) => { setRecipientId(event?.target.value)}}
+                        id="recipient-id"
+                        className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        placeholder="Provide recipient id"
+                    />
+                    </div>
+                </div>
                 <div>
                     <label htmlFor="comment" className="sr-only">
                         Add a message
@@ -121,9 +133,7 @@ const LandingPage = () => {
                 </div>
                 <div>
                     <button
-                        onClick={() => {
-                            handleSendDirectMessages()
-                        }}
+                        onClick={handleSendDirectMessages}
                         type="button"
                         className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >

@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
+import { UserProvider } from '../lib/UserProvider'
 
 import { Amplify } from "aws-amplify";
 //import awsExports from "../src/aws-exports";
@@ -12,7 +13,9 @@ Amplify.configure({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return <UserProvider>
+    <Component {...pageProps} />
+  </UserProvider>
 }
 
 export default MyApp

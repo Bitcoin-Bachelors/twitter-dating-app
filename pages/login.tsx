@@ -46,7 +46,7 @@ export default function LoginToBitcoinBachelors() {
             // Authenticate using via passport api in the backend
             // Open Twitter login page
             // Upon successful login, a cookie session will be stored in the client
-            window.open("http://localhost:4000/v1/twitter", "_self");
+            window.open("http://127.0.0.1:4000/v1/auth/twitter/authorize", "_self");
         } catch (error) {
 
         }
