@@ -11,7 +11,7 @@ const Header = () => {
 
     return (
         <div className="py-4 shadow px-4 flex items-center justify-between">
-            <div className="uppercase">Twitter Direct message testing</div>
+            <div className="uppercase">Twitter Direct message testing & connect cashapp</div>
             <button
                 onClick={handleLogOut}
                 type="button"
