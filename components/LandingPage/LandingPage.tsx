@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react"
-import { deleteuserdirectmessages, getuserdirectmessages, listuserdirectmessages, senduserdirectmessages, listcashapppayments } from "../../lib/twitter"
+import { useState } from "react"
+import { deleteuserdirectmessages, getuserdirectmessages, listuserdirectmessages, senduserdirectmessages } from "../../lib/twitter"
+import { listcashapppayments } from "../../lib/cashapp"
 
 const LandingPage = () => {
     const [messageId, setMessageId] = useState("")
     const [message, setMessage] = useState("")
     const [recipientId, setRecipientId] = useState("25035311")
-
 
 
     // handle list direct messages
@@ -37,8 +37,8 @@ const LandingPage = () => {
     }
 
     // handle link cash app
-    const handleLinkCashApp = async () => {
-        //
+    const handleLinkCashApp = () => {
+        window.open("http://127.0.0.1:4000/v1/auth/cashapp/authorize/", "_self");
     }
 
     const handleListCashappPayments = async () => {
